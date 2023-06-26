@@ -3,6 +3,7 @@ import { Form } from './Form/Form';
 import { ContactsList } from './ContactsList/ContactsList';
 import { Filter } from './Filter/Filter';
 import { StyledGlobal } from 'GlobalStyle';
+import { saveData, loadData } from '../utils/localstorage';
 
 export class App extends Component {
   state = {
@@ -14,6 +15,20 @@ export class App extends Component {
     ],
     filter: '',
   };
+
+  componentDidMount() {
+    const savedContacts = loadData('contacts');
+    if (savedContacts) {
+      this.setState({ contacts: savedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { contacts } = this.state;
+    if (prevState.contacts !== contacts) {
+      saveData(contacts, 'contacts');
+    }
+  }
 
   onSubmit = ({ name, number }) => {
     const { contacts } = this.state;
@@ -45,9 +60,9 @@ export class App extends Component {
     );
   };
 
-  deleteContact = (contactId) => {
-    this.setState((prevState) => ({
-      contacts: prevState.contacts.filter((contact) => contact.id !== contactId),
+  deleteContact = contactId => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
     }));
   };
 
@@ -63,7 +78,10 @@ export class App extends Component {
           value={filter}
           onChange={this.handleFilterChange}
         />
-        <ContactsList contacts={this.filterContacts()} onDeleteContact={this.deleteContact}/>
+        <ContactsList
+          contacts={this.filterContacts()}
+          onDeleteContact={this.deleteContact}
+        />
       </StyledGlobal>
     );
   }
