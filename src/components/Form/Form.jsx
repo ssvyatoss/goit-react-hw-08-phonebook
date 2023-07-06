@@ -1,29 +1,36 @@
-import { useCallback } from 'react';
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact, selectContacts } from 'redux/contactsSlice';
 
-export const Form = ({ onSubmit }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+export const Form = () => {
+  const [name, setName] = React.useState('');
+  const [number, setNumber] = React.useState('');
+  const contacts = useSelector(selectContacts);
+  const dispatch = useDispatch();
 
-  const handleChange = useCallback(e => {
+  const handleChange = e => {
     const { name, value } = e.target;
     if (name === 'name') {
       setName(value);
     } else if (name === 'number') {
       setNumber(value);
     }
-  }, []);
+  };
 
-  const handleSubmit = useCallback(
-    e => {
-      e.preventDefault();
-      onSubmit({ name, number });
-      setName('');
-      setNumber('');
-    },
-    [onSubmit, name, number]
-  );
+  const handleSubmit = e => {
+    e.preventDefault();
+    const isContactExist = contacts.some(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (isContactExist) {
+      return alert(`Contact "${name}" already exists in the phonebook!`);
+    }
+    dispatch(addContact({name, number}));
+    setName('');
+    setNumber('');
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <label>
@@ -53,8 +60,4 @@ export const Form = ({ onSubmit }) => {
       <button type="submit">Add contact</button>
     </form>
   );
-};
-
-Form.propTypes = {
-  onSubmit: PropTypes.func,
 };
