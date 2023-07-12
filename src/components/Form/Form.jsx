@@ -1,11 +1,10 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact, selectContacts } from 'redux/contactsSlice';
+import { useDispatch } from 'react-redux';
+import { setContactThunk } from 'redux/thunks';
 
 export const Form = () => {
   const [name, setName] = React.useState('');
   const [number, setNumber] = React.useState('');
-  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   const handleChange = e => {
@@ -19,14 +18,8 @@ export const Form = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    const isContactExist = contacts.some(
-      contact => contact.name.toLowerCase() === name.toLowerCase()
-    );
-
-    if (isContactExist) {
-      return alert(`Contact "${name}" already exists in the phonebook!`);
-    }
-    dispatch(addContact({name, number}));
+    dispatch(setContactThunk({name, number}))
+    .unwrap()
     setName('');
     setNumber('');
   };
