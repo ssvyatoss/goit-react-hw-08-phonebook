@@ -1,7 +1,9 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectContacts, selectFilter } from 'redux/selectors'
-import { removeContactThunk } from 'redux/thunks';
+import { selectContacts, selectFilter } from 'redux/contacts/selectors'
+import { removeContactThunk } from 'redux/contacts/thunks';
+import { ContactsListButton, ContactsListItem, ContactsListStyled } from './ContactsListStyled';
+
 
 export const ContactsList = () => {
   const contacts = useSelector(selectContacts);
@@ -13,17 +15,18 @@ export const ContactsList = () => {
   );
 
   const handleDelete = id => {
-    dispatch(removeContactThunk(id));
+    dispatch(removeContactThunk
+    (id));
   };
 
   return (
-    <ul>
+    <ContactsListStyled>
       {filteredContacts.map(contact => (
-        <li key={contact.id}>
+        <ContactsListItem key={contact.id}>
           {contact.name}: {contact.number}
-          <button onClick={() => handleDelete(contact.id)}>Delete</button>
-        </li>
+          <ContactsListButton onClick={() => handleDelete(contact.id)}>Delete</ContactsListButton>
+        </ContactsListItem>
       ))}
-    </ul>
+    </ContactsListStyled>
   );
 };

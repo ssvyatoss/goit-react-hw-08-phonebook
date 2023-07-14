@@ -1,6 +1,8 @@
+import { Button } from 'pages/Pages.styled';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { setContactThunk } from 'redux/thunks';
+import { setContactThunk } from 'redux/contacts/thunks';
+import { StyledForm } from './FormStyled';
 
 export const Form = () => {
   const [name, setName] = React.useState('');
@@ -25,7 +27,8 @@ export const Form = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <StyledForm onSubmit={handleSubmit}>
+
       <label>
         Name <br />
         <input
@@ -50,7 +53,7 @@ export const Form = () => {
       </label>
 
       <br />
-      <button type="submit">Add contact</button>
-    </form>
+      <Button type="submit">Add contact</Button>
+    </StyledForm>
   );
 };

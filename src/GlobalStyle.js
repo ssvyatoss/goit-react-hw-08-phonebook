@@ -28,4 +28,4 @@ export const StyledGlobal = styled.div`
         margin-left: 10px;
     }
   }
-`;
+` 
