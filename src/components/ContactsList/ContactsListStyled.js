@@ -17,6 +17,7 @@ export const ContactsListItem = styled.li`
   }
 `;
 
+
 export const ContactsListButton = styled.button`
   margin-left: 10px;
   background-color: #c2fbd7;
